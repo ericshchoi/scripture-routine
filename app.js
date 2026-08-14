@@ -29,10 +29,9 @@ function renderJourney(p){
   const bubble=$("#journeyBubble");
   if(!moving || !bubble) return;
   const t=Math.max(0,Math.min(100,p))/100;
-  // Follow the diagonal staircase from lower-left to upper-right.
-  // Slight easing makes early progress more visible without changing the real percentage.
-  const x=13 + 69*t;
-  const y=11 + 62*t;
+  // Path follows the visible center of the staircase.
+  const x=17 + 64*t;
+  const y=10 + 63*t;
   moving.style.left=`${x}%`;
   moving.style.bottom=`${y}%`;
   bubble.textContent=`${pctText()}%`;
@@ -78,5 +77,5 @@ $("#quickAlarmBtn").onclick=()=>togglePanel("reminderPanel",true);
 $$("[data-scroll]").forEach(b=>b.onclick=()=>{if(b.dataset.scroll==="today")document.querySelector(".today-card").scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0,behavior:"smooth"})});
 
 let deferredPrompt;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
-if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-7");
+if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-8");
 buildStairs();fillBooks();if(saved.updatedAt)$("#progressEditor").classList.add("collapsed");render();
