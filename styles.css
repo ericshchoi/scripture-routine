@@ -102,3 +102,29 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
   .hero-zone{height:390px}.hero-copy{left:25px;right:20px}.hero-copy h1{font-size:27px;line-height:1.25}.hero-copy .subtitle{font-size:14px}.journey{height:265px}.stairs{left:30px;right:36px;bottom:22px}.cross{right:31px;transform:scale(.82);transform-origin:top}.cross-glow{right:-5px;top:0}.marker-zero{left:26px;bottom:15px}.marker-hundred{right:11px;top:111px}.prayer-child{width:90px;height:110px;transform:translate(-50%,15%)}.journey-bubble{left:76px;font-size:14px}
   .progress-overview{grid-template-columns:1fr}.overview-copy{text-align:center}.mini-stats{margin-top:8px}
 }
+
+/* V2.4 approved generated hero artwork */
+.approved-journey{
+  position:absolute;left:0;right:0;bottom:0;height:305px;overflow:hidden;
+  background:#f7f4fc;
+}
+.approved-journey .journey-art{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%;
+  display:block;
+}
+.approved-journey .dynamic-bubble{
+  position:absolute;z-index:12;left:26%;top:53%;
+  min-width:62px;text-align:center;background:rgba(255,255,255,.96);
+  border:2px solid #9d7cf1;color:#5e3fc4;border-radius:13px;padding:7px 9px;
+  font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(89,57,162,.12);
+  transition:left .7s cubic-bezier(.2,.8,.2,1),top .7s cubic-bezier(.2,.8,.2,1);
+}
+/* Hide obsolete CSS-drawn journey pieces if an old cached DOM briefly appears. */
+.approved-journey .stairs,.approved-journey .cross,.approved-journey .cross-glow,
+.approved-journey .prayer-child,.approved-journey .marker{display:none!important}
+@media(max-width:650px){
+  .approved-journey{height:285px}
+}
+@media(max-width:420px){
+  .approved-journey{height:265px}
+}
