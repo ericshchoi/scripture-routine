@@ -128,3 +128,49 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
 @media(max-width:420px){
   .approved-journey{height:265px}
 }
+
+/* V2.5 REAL LAYERED JOURNEY */
+.hero-copy h1 .title-line1,
+.hero-copy h1 .title-line2{display:inline}
+.layered-journey{
+  position:absolute;left:0;right:0;bottom:0;height:305px;overflow:hidden;
+  background:linear-gradient(180deg,#faf8ff,#f5f0fb);
+}
+.layered-journey .journey-bg{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:block;
+}
+.layered-journey .marker{
+  position:absolute;z-index:8;font-weight:800;color:#4330b2;font-size:18px;
+  text-shadow:0 1px 0 rgba(255,255,255,.9);
+}
+.layered-journey .marker-zero{left:7%;bottom:9%}
+.layered-journey .marker-hundred{right:5%;top:17%}
+.moving-progress{
+  position:absolute;z-index:12;left:14%;bottom:12%;width:96px;height:118px;
+  transform:translate(-50%,12%);transition:left .75s cubic-bezier(.2,.8,.2,1),bottom .75s cubic-bezier(.2,.8,.2,1);
+}
+.moving-child{
+  position:absolute;left:0;bottom:0;width:82px;height:auto;filter:drop-shadow(0 5px 5px rgba(53,37,69,.16));
+}
+.moving-progress .journey-bubble{
+  position:absolute;left:70px;top:4px;min-width:62px;text-align:center;
+  background:rgba(255,255,255,.97);border:2px solid #9273e9;color:#5d3fc8;
+  border-radius:13px;padding:7px 9px;font-weight:800;font-size:16px;
+  box-shadow:0 6px 18px rgba(89,57,162,.13);white-space:nowrap;
+}
+@media(max-width:650px){
+  .layered-journey{height:285px}
+  .hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:block}
+  .hero-copy h1{font-size:31px}
+  .moving-progress{width:88px;height:108px}
+  .moving-child{width:76px}
+}
+@media(max-width:420px){
+  .layered-journey{height:265px}
+  .hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:block}
+  .hero-copy h1{font-size:27px;line-height:1.28}
+  .moving-progress{width:78px;height:98px}
+  .moving-child{width:68px}
+  .moving-progress .journey-bubble{left:58px;top:7px;font-size:14px;padding:6px 8px}
+  .layered-journey .marker{font-size:16px}
+}

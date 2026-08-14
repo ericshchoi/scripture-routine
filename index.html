@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=20260814-6">
+  <link rel="stylesheet" href="/styles.css?v=20260814-7">
   <title>청운교회 피택자 신약 필사 진도 체크</title>
 </head>
 <body>
@@ -27,14 +27,19 @@
       <div class="hero-sun"></div>
 
       <div class="hero-copy">
-        <h1>청운교회 피택자 신약 필사 진도 체크</h1>
+        <h1><span class="title-line1">청운교회 피택자</span><span class="title-line2">신약 필사 진도 체크</span></h1>
         <p class="subtitle">“주의 말씀은 내 발에 등이요 내 길에 빛이니이다”</p>
         <p class="verse">시편 119:105</p>
       </div>
 
-      <div class="journey approved-journey" aria-label="필사 진도 계단">
-        <img class="journey-art" src="/journey-art.jpg?v=20260814-6" alt="" aria-hidden="true">
-        <div id="journeyBubble" class="journey-bubble dynamic-bubble">0%</div>
+      <div class="journey layered-journey" aria-label="필사 진도 계단">
+        <img class="journey-bg" src="/journey-background.jpg?v=20260814-7" alt="" aria-hidden="true">
+        <div class="marker marker-zero">0%</div>
+        <div class="marker marker-hundred">100%</div>
+        <div id="movingProgress" class="moving-progress">
+          <img id="prayerChild" class="moving-child" src="/praying-child.png?v=20260814-7" alt="무릎 꿇고 기도하는 아이">
+          <div id="journeyBubble" class="journey-bubble">0%</div>
+        </div>
       </div>
     </section>
 
@@ -131,7 +136,7 @@
       <button data-target="reminderPanel">⚙<span>설정</span></button>
     </nav>
   </main>
-  <script src="/scripture.js?v=20260814-6"></script>
-  <script src="/app.js?v=20260814-6"></script>
+  <script src="/scripture.js?v=20260814-7"></script>
+  <script src="/app.js?v=20260814-7"></script>
 </body>
 </html>
