@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5f1e8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="필사루틴">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/styles.css">
+  <title>필사루틴</title>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div>
+        <p class="eyebrow">NEW TESTAMENT SCRIPTURE</p>
+        <h1>필사루틴</h1>
+      </div>
+      <button id="installBtn" class="ghost hidden">앱 설치</button>
+    </header>
+
+    <section class="hero card">
+      <div class="hero-meta"><span id="todayLabel"></span><span id="streakPill">🔥 0일</span></div>
+      <p class="muted">오늘의 필사</p>
+      <h2 id="todayRange">계획을 불러오는 중…</h2>
+      <p id="verseCount" class="muted"></p>
+      <button id="completeBtn" class="primary">오늘 필사 완료</button>
+      <button id="undoBtn" class="link hidden">완료 취소</button>
+    </section>
+
+    <section class="stats">
+      <article class="card stat"><strong id="progressPct">0%</strong><span>전체 진행률</span></article>
+      <article class="card stat"><strong id="doneDays">0</strong><span>완료한 날</span></article>
+      <article class="card stat"><strong id="remainingDays">0</strong><span>남은 필사일</span></article>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><div><p class="eyebrow">REMINDER</p><h3>필사 알림</h3></div><label class="switch"><input id="notifyToggle" type="checkbox"><span></span></label></div>
+      <div class="setting-row"><label for="notifyTime">알림 시간</label><input id="notifyTime" type="time" value="22:00"></div>
+      <div class="days" id="dayButtons"></div>
+      <button id="saveReminder" class="secondary">알림 설정 저장</button>
+      <p id="notifyHelp" class="help">아이폰은 홈 화면에 설치한 뒤 알림을 허용해야 합니다.</p>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><div><p class="eyebrow">PLAN</p><h3>전체 계획</h3></div><button id="reflowBtn" class="ghost">오늘부터 재분배</button></div>
+      <div id="planList" class="plan"></div>
+    </section>
+
+    <footer>목표: 2026년 12월 31일 · 일요일 휴식/보충</footer>
+  </main>
+  <script src="/schedule.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
