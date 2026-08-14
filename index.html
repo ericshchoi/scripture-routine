@@ -3,55 +3,136 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f5f1e8">
+  <meta name="theme-color" content="#7254d8">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="필사루틴">
+  <meta name="apple-mobile-web-app-title" content="청운교회 신약필사">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/styles.css">
-  <title>필사루틴</title>
+  <title>청운교회 피택자 신약 필사 진도 체크</title>
 </head>
 <body>
   <main class="shell">
-    <header class="top">
-      <div>
-        <p class="eyebrow">NEW TESTAMENT SCRIPTURE</p>
-        <h1>필사루틴</h1>
-      </div>
-      <button id="installBtn" class="ghost hidden">앱 설치</button>
+    <header class="brand-head">
+      <button class="icon-btn" aria-label="메뉴">☰</button>
+      <button id="quickAlarmBtn" class="alarm-pill">🔔 알림 설정</button>
     </header>
 
-    <section class="hero card">
-      <div class="hero-meta"><span id="todayLabel"></span><span id="streakPill">🔥 0일</span></div>
-      <p class="muted">오늘의 필사</p>
-      <h2 id="todayRange">계획을 불러오는 중…</h2>
-      <p id="verseCount" class="muted"></p>
-      <button id="completeBtn" class="primary">오늘 필사 완료</button>
-      <button id="undoBtn" class="link hidden">완료 취소</button>
+    <section class="intro">
+      <h1>청운교회 피택자 신약 필사 진도 체크</h1>
+      <p class="subtitle">“말씀을 따라 한 걸음씩, 예수님께 더 가까이”</p>
+      <p class="verse">시편 119:105</p>
     </section>
 
-    <section class="stats">
-      <article class="card stat"><strong id="progressPct">0%</strong><span>전체 진행률</span></article>
-      <article class="card stat"><strong id="doneDays">0</strong><span>완료한 날</span></article>
-      <article class="card stat"><strong id="remainingDays">0</strong><span>남은 필사일</span></article>
+    <section class="journey" aria-label="필사 진도 계단">
+      <div class="sky-glow"></div>
+      <div class="cross" aria-hidden="true"><span></span><i></i></div>
+      <div class="stairs" id="stairs"></div>
+      <div class="marker marker-zero">0%</div>
+      <div class="marker marker-hundred">100%</div>
+      <div id="prayerChild" class="prayer-child" aria-label="현재 진도">
+        <div class="child-art">
+          <div class="hair"></div><div class="face"></div><div class="body"></div>
+          <div class="hands">🙏</div><div class="knees"></div>
+        </div>
+        <div id="journeyBubble" class="journey-bubble">0%</div>
+      </div>
     </section>
 
-    <section class="card">
-      <div class="section-title"><div><p class="eyebrow">REMINDER</p><h3>필사 알림</h3></div><label class="switch"><input id="notifyToggle" type="checkbox"><span></span></label></div>
+    <section class="card progress-overview">
+      <div class="ring" id="progressRing"><div><span>전체 진도율</span><strong id="progressPct">0%</strong><small id="progressFraction">0 / 0절</small></div></div>
+      <div class="overview-copy">
+        <h2 id="encourageTitle">계속해서 말씀을 따라 나아가요!</h2>
+        <p>오늘도 주님의 말씀으로 은혜로운 하루 되세요.</p>
+        <div class="mini-stats">
+          <div><span>📖</span><small>완료 분량</small><strong id="completedVerses">0절</strong></div>
+          <div><span>📅</span><small>남은 기간</small><strong id="remainingDays">0일</strong></div>
+          <div><span>✍️</span><small>하루 평균</small><strong id="dailyAverage">0절</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card current-card">
+      <div class="section-heading">
+        <div><p class="eyebrow">CURRENT PROGRESS</p><h3>현재 완료 위치 설정</h3></div>
+        <button id="progressEditBtn" class="text-btn">진도 수정</button>
+      </div>
+      <p class="helper">마지막으로 완료한 위치를 입력해주세요. 그 다음 절부터 계획을 다시 계산합니다.</p>
+      <div id="progressSummary" class="progress-summary">진도를 설정해주세요.</div>
+      <div id="progressEditor" class="progress-editor">
+        <label><span>성경</span><select id="bookSelect"></select></label>
+        <label><span>장</span><select id="chapterSelect"></select></label>
+        <label><span>절</span><select id="verseSelect"></select></label>
+        <button id="saveProgressBtn" class="purple-btn">↻ 적용하고 계획 다시 계산</button>
+      </div>
+      <div class="example-note">ⓘ 예: 마가복음 10장 20절까지 완료하셨다면, 마가복음 10장 21절부터 다시 계획됩니다.</div>
+    </section>
+
+    <section class="card today-card">
+      <div class="today-copy">
+        <p class="eyebrow green">TODAY</p>
+        <h3>오늘의 필사</h3>
+        <div class="today-row">
+          <div class="book-circle">▤</div>
+          <div>
+            <strong id="todayRange">계획을 불러오는 중…</strong>
+            <p id="verseCount">현재 진도에 맞춰 계산합니다.</p>
+          </div>
+        </div>
+      </div>
+      <div class="today-action">
+        <div class="date-pill" id="todayLabel"></div>
+        <button id="completeBtn" class="green-btn">✓ 오늘 필사 완료</button>
+        <button id="undoBtn" class="undo-btn hidden">완료 취소</button>
+      </div>
+    </section>
+
+    <section class="menu-card card">
+      <button class="menu-row" data-target="reminderPanel">
+        <span class="menu-icon">🔔</span><span><strong>알림 설정</strong><small>필사 알림 시간과 요일을 설정하세요.</small></span><b>›</b>
+      </button>
+      <button class="menu-row" data-target="planPanel">
+        <span class="menu-icon">🗓️</span><span><strong>전체 계획 보기</strong><small>신약 전체 필사 계획과 진행 상황을 확인하세요.</small></span><b>›</b>
+      </button>
+      <button class="menu-row" data-target="statsPanel">
+        <span class="menu-icon">📊</span><span><strong>진도 현황</strong><small>현재 진도와 남은 분량을 확인하세요.</small></span><b>›</b>
+      </button>
+    </section>
+
+    <section id="reminderPanel" class="card fold-panel">
+      <div class="section-heading"><div><p class="eyebrow">REMINDER</p><h3>필사 알림</h3></div><label class="switch"><input id="notifyToggle" type="checkbox"><span></span></label></div>
       <div class="setting-row"><label for="notifyTime">알림 시간</label><input id="notifyTime" type="time" value="22:00"></div>
       <div class="days" id="dayButtons"></div>
-      <button id="saveReminder" class="secondary">알림 설정 저장</button>
-      <p id="notifyHelp" class="help">아이폰은 홈 화면에 설치한 뒤 알림을 허용해야 합니다.</p>
+      <button id="saveReminder" class="purple-btn full">알림 설정 저장</button>
+      <p id="notifyHelp" class="helper">아이폰은 홈 화면에 설치한 뒤 알림을 허용해야 합니다.</p>
     </section>
 
-    <section class="card">
-      <div class="section-title"><div><p class="eyebrow">PLAN</p><h3>전체 계획</h3></div><button id="reflowBtn" class="ghost">오늘부터 재분배</button></div>
+    <section id="planPanel" class="card fold-panel">
+      <div class="section-heading"><div><p class="eyebrow">PLAN</p><h3>전체 필사 계획</h3></div><button id="reflowBtn" class="text-btn">오늘부터 재분배</button></div>
       <div id="planList" class="plan"></div>
     </section>
 
-    <footer>목표: 2026년 12월 31일 · 일요일 휴식/보충</footer>
+    <section id="statsPanel" class="card fold-panel">
+      <div class="section-heading"><div><p class="eyebrow">STATUS</p><h3>진도 현황</h3></div><span id="streakPill" class="streak">🔥 0일 연속</span></div>
+      <div class="status-grid">
+        <div><small>신약 전체</small><strong id="statusPct">0%</strong></div>
+        <div><small>완료한 날</small><strong id="doneDays">0일</strong></div>
+        <div><small>남은 절</small><strong id="remainingVerses">0절</strong></div>
+      </div>
+    </section>
+
+    <button id="installBtn" class="install-btn hidden">앱으로 설치하기</button>
+    <footer>한 절, 한 절이 모여 주님께 더 가까이 갑니다. · 목표 2026년 12월 31일</footer>
+
+    <nav class="bottom-nav">
+      <button data-scroll="top">⌂<span>홈</span></button>
+      <button data-scroll="today">▤<span>오늘의 필사</span></button>
+      <button data-target="planPanel">▣<span>전체 계획</span></button>
+      <button data-target="statsPanel">▥<span>진도 현황</span></button>
+      <button data-target="reminderPanel">⚙<span>설정</span></button>
+    </nav>
   </main>
-  <script src="/schedule.js"></script>
+  <script src="/scripture.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>

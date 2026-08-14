@@ -1,10 +1,10 @@
 {
-  "name": "필사루틴 - 신약 필사 계획",
-  "short_name": "필사루틴",
+  "name": "청운교회 피택자 신약 필사 진도 체크",
+  "short_name": "청운교회 신약필사",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f5f1e8",
-  "theme_color": "#365f4b",
+  "background_color": "#f7f6fb",
+  "theme_color": "#7254d8",
   "lang": "ko-KR",
   "icons": [
     {

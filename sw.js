@@ -1,6 +1,6 @@
 
-const CACHE="scripture-pwa-v1";
-const ASSETS=["/","/index.html","/styles.css","/app.js","/schedule.js","/manifest.webmanifest"];
+const CACHE="scripture-pwa-v2-approved-ui";
+const ASSETS=["/","/index.html","/styles.css","/app.js","/scripture.js","/manifest.webmanifest"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
 self.addEventListener("fetch",e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
 self.addEventListener("push",e=>{
