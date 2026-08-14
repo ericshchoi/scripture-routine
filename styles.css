@@ -240,3 +240,38 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
  .moving-progress{width:90px;height:118px}.moving-child{width:86px}
  .moving-progress .journey-bubble{left:72px;top:10px;font-size:14px}
 }
+
+/* V2.8 FINAL CLEAN */
+.hero-copy{z-index:20}
+.hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:inline}
+.layered-journey{
+  height:410px;
+  background:#faf8fd;
+  overflow:hidden;
+}
+.layered-journey .journey-bg{
+  width:100%;height:100%;object-fit:cover;object-position:center center;
+  image-rendering:auto;
+}
+.layered-journey .marker{z-index:15}
+.moving-progress{z-index:18}
+.moving-child{
+  width:100px;height:auto;
+  filter:drop-shadow(0 6px 7px rgba(49,36,68,.18));
+}
+.moving-progress .journey-bubble{left:87px;top:9px;z-index:19}
+@media(max-width:650px){
+  .hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:block}
+  .hero-copy h1{font-size:34px;line-height:1.28}
+  .layered-journey{height:430px}
+}
+@media(max-width:420px){
+  .hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:block}
+  .hero-copy h1{font-size:29px;line-height:1.3;letter-spacing:-.04em}
+  .hero-copy .subtitle{font-size:15px;line-height:1.55}
+  .hero-copy .verse{font-size:14px}
+  .layered-journey{height:390px}
+  .moving-progress{width:92px;height:118px}
+  .moving-child{width:84px}
+  .moving-progress .journey-bubble{left:72px;top:8px;font-size:14px}
+}
