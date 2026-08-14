@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=20260814-11">
+  <link rel="stylesheet" href="/styles.css?v=20260814-12">
   <title>청운교회 피택자 신약 필사 진도 체크</title>
 </head>
 <body>
@@ -33,11 +33,11 @@
       </div>
 
       <div class="journey layered-journey" aria-label="필사 진도 계단">
-        <img class="journey-bg" src="/journey-background.jpg?v=20260814-11" alt="" aria-hidden="true">
+        <img class="journey-bg" src="/journey-background.jpg?v=20260814-12" alt="" aria-hidden="true">
         <div class="marker marker-zero">0%</div>
         <div class="marker marker-hundred">100%</div>
         <div id="movingProgress" class="moving-progress">
-          <img id="prayerChild" class="moving-child" src="/praying-child.png?v=20260814-11" alt="무릎 꿇고 기도하는 아이">
+          <img id="prayerChild" class="moving-child" src="/praying-child.png?v=20260814-12" alt="무릎 꿇고 기도하는 아이">
           <div id="journeyBubble" class="journey-bubble">0%</div>
         </div>
       </div>
@@ -126,6 +126,44 @@
     </section>
 
     <button id="installBtn" class="install-btn hidden">앱으로 설치하기</button>
+    
+    <section id="installGuideCard" class="card install-guide-card">
+      <div class="install-guide-icon">📱</div>
+      <div class="install-guide-copy">
+        <strong>홈 화면에 앱 추가하기</strong>
+        <small>한 번 추가해두면 일반 앱처럼 바로 실행할 수 있어요.</small>
+      </div>
+      <button id="installGuideBtn" class="install-guide-btn" type="button">추가 방법 보기</button>
+    </section>
+
+    <div id="installGuideModal" class="install-modal hidden" role="dialog" aria-modal="true" aria-labelledby="installModalTitle">
+      <div class="install-modal-backdrop" data-close-install></div>
+      <div class="install-modal-sheet">
+        <button class="install-modal-close" type="button" data-close-install aria-label="닫기">×</button>
+        <div class="install-modal-phone">📲</div>
+        <h3 id="installModalTitle">홈 화면에 추가하기</h3>
+        <div id="installIosGuide" class="install-device-guide">
+          <p class="install-device-title">🍎 아이폰 / 아이패드</p>
+          <ol>
+            <li><b>Safari</b>에서 이 페이지를 열어주세요.</li>
+            <li>화면 아래의 <b>공유 버튼 □↑</b>을 누르세요.</li>
+            <li><b>‘홈 화면에 추가’</b>를 선택하세요.</li>
+            <li>오른쪽 위 <b>‘추가’</b>를 누르면 완료됩니다.</li>
+          </ol>
+          <p class="install-tip">※ 카카오톡 안에서 열었다면 우선 Safari로 열어주세요.</p>
+        </div>
+        <div id="installAndroidGuide" class="install-device-guide">
+          <p class="install-device-title">🤖 안드로이드</p>
+          <ol>
+            <li><b>Chrome</b>에서 이 페이지를 열어주세요.</li>
+            <li>오른쪽 위 <b>⋮ 메뉴</b>를 누르세요.</li>
+            <li><b>‘홈 화면에 추가’</b> 또는 <b>‘앱 설치’</b>를 선택하세요.</li>
+          </ol>
+        </div>
+        <button id="nativeInstallBtn" class="purple-btn full hidden" type="button">지금 앱 설치하기</button>
+      </div>
+    </div>
+
     <footer>한 절, 한 절이 모여 주님께 더 가까이 갑니다. · 목표 2026년 12월 31일</footer>
 
     <nav class="bottom-nav">
@@ -136,7 +174,7 @@
       <button data-target="reminderPanel">⚙<span>설정</span></button>
     </nav>
   </main>
-  <script src="/scripture.js?v=20260814-11"></script>
-  <script src="/app.js?v=20260814-11"></script>
+  <script src="/scripture.js?v=20260814-12"></script>
+  <script src="/app.js?v=20260814-12"></script>
 </body>
 </html>

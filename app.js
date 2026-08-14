@@ -73,5 +73,70 @@ $("#quickAlarmBtn").onclick=()=>togglePanel("reminderPanel",true);
 $$("[data-scroll]").forEach(b=>b.onclick=()=>{if(b.dataset.scroll==="today")document.querySelector(".today-card").scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0,behavior:"smooth"})});
 
 let deferredPrompt;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
-if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-11");
+if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-12");
 buildStairs();fillBooks();if(saved.updatedAt)$("#progressEditor").classList.add("collapsed");render();
+// V3.0 install / Add to Home Screen helper
+let deferredInstallPrompt = null;
+const isStandalone = () =>
+  window.matchMedia("(display-mode: standalone)").matches ||
+  window.navigator.standalone === true;
+
+function setupInstallGuide(){
+  const card = document.getElementById("installGuideCard");
+  const modal = document.getElementById("installGuideModal");
+  const openBtn = document.getElementById("installGuideBtn");
+  const nativeBtn = document.getElementById("nativeInstallBtn");
+  if(!card || !modal || !openBtn) return;
+
+  if(isStandalone()){
+    card.classList.add("hidden");
+    return;
+  }
+
+  const ua = navigator.userAgent || "";
+  const ios = /iPhone|iPad|iPod/i.test(ua);
+  const android = /Android/i.test(ua);
+  const iosGuide = document.getElementById("installIosGuide");
+  const androidGuide = document.getElementById("installAndroidGuide");
+
+  const showModal = () => {
+    modal.classList.remove("hidden");
+    if(iosGuide) iosGuide.classList.toggle("hidden", android && !ios);
+    if(androidGuide) androidGuide.classList.toggle("hidden", ios && !android);
+    document.body.style.overflow = "hidden";
+  };
+  const closeModal = () => {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+  };
+
+  openBtn.addEventListener("click", showModal);
+  modal.querySelectorAll("[data-close-install]").forEach(el => el.addEventListener("click", closeModal));
+
+  window.addEventListener("beforeinstallprompt", e => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    if(nativeBtn) nativeBtn.classList.remove("hidden");
+  });
+
+  if(nativeBtn){
+    nativeBtn.addEventListener("click", async () => {
+      if(!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      nativeBtn.classList.add("hidden");
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    closeModal();
+    card.classList.add("hidden");
+  });
+}
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", setupInstallGuide);
+}else{
+  setupInstallGuide();
+}

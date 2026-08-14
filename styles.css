@@ -282,3 +282,25 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
 .hero-copy{z-index:25}.moving-progress{z-index:30}.layered-journey .marker{z-index:29}
 @media(max-width:650px){.hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:block}.layered-journey{height:430px}}
 @media(max-width:420px){.hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:block}.layered-journey{height:390px}}
+
+/* V3.0 Home-screen install guide */
+.install-guide-card{display:grid;grid-template-columns:52px 1fr auto;gap:13px;align-items:center;margin-top:18px}
+.install-guide-icon{width:48px;height:48px;border-radius:15px;background:#eee7ff;display:grid;place-items:center;font-size:25px}
+.install-guide-copy strong,.install-guide-copy small{display:block}
+.install-guide-copy strong{font-size:16px;color:#252044}
+.install-guide-copy small{font-size:12px;color:#777184;margin-top:4px;line-height:1.45}
+.install-guide-btn{border:0;border-radius:11px;background:#6d43d5;color:#fff;padding:11px 13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.install-modal{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.install-modal-backdrop{position:absolute;inset:0;background:rgba(28,20,43,.42);backdrop-filter:blur(2px)}
+.install-modal-sheet{position:relative;z-index:2;width:min(560px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:25px 22px calc(26px + env(safe-area-inset-bottom));box-shadow:0 -12px 40px rgba(34,22,57,.18)}
+.install-modal-close{position:absolute;right:16px;top:12px;border:0;background:#f2eff7;width:34px;height:34px;border-radius:50%;font-size:24px;color:#5d5868;cursor:pointer}
+.install-modal-phone{text-align:center;font-size:39px;margin:3px 0 5px}
+.install-modal-sheet h3{text-align:center;margin:0 0 20px;font-size:21px}
+.install-device-guide{background:#f8f6fc;border-radius:15px;padding:14px 16px;margin:11px 0}
+.install-device-title{font-weight:800;margin:0 0 9px;color:#342b5f}
+.install-device-guide ol{margin:0;padding-left:22px;color:#4f4a5a;font-size:14px;line-height:1.85}
+.install-tip{font-size:12px;color:#7b7485;margin:9px 0 0}
+@media(max-width:520px){
+ .install-guide-card{grid-template-columns:48px 1fr}
+ .install-guide-btn{grid-column:1/-1;width:100%}
+}
