@@ -1,11 +1,11 @@
 
-const CACHE="scripture-pwa-v2-1-20260814-3";
+const CACHE="scripture-pwa-v2-2-20260814-5";
 const ASSETS=[
   "/",
   "/index.html",
-  "/styles.css?v=20260814-3",
-  "/app.js?v=20260814-3",
-  "/scripture.js?v=20260814-3",
+  "/styles.css?v=20260814-5",
+  "/app.js?v=20260814-5",
+  "/scripture.js?v=20260814-5",
   "/manifest.webmanifest",
   "/icon.svg"
 ];

@@ -24,21 +24,29 @@ function pctText(){let p=progressValue();return p<10?p.toFixed(1):p.toFixed(0)}
 function streak(){let set=new Set(history.map(x=>x.date)),n=0,d=new Date();for(let i=0;i<400;i++){let iso=d.toLocaleDateString("sv-SE");if(d.getDay()===0){d.setDate(d.getDate()-1);continue}if(set.has(iso)){n++;d.setDate(d.getDate()-1)}else if(iso===todayISO())d.setDate(d.getDate()-1);else break}return n}
 
 function buildStairs(){
- const host=$("#stairs"); host.innerHTML="";
- const count=13;
- for(let i=0;i<count;i++){
-   let s=document.createElement("div");s.className="step";s.dataset.i=i;
-   let x=(i/(count-1))*78, y=(i/(count-1))*78;
-   s.style.left=`${x}%`;s.style.bottom=`${y}%`;s.style.width=`${27-i*.65}%`;
-   host.appendChild(s);
- }
+  const host=$("#stairs"); host.innerHTML="";
+  const count=12;
+  for(let i=0;i<count;i++){
+    const s=document.createElement("div");
+    s.className="step"; s.dataset.i=i;
+    const t=i/(count-1);
+    const x=t*76;
+    const y=t*76;
+    s.style.left=`${x}%`;
+    s.style.bottom=`${y}%`;
+    s.style.width=`${31 - i*0.92}%`;
+    host.appendChild(s);
+  }
 }
 function renderJourney(p){
- const child=$("#prayerChild"), bubble=$("#journeyBubble");
- const x=12+p*.68, y=15+p*.63;
- child.style.left=`${x}%`; child.style.bottom=`${y}%`;
- bubble.textContent=`${pctText()}%`;
- $$(".step").forEach((s,i)=>s.classList.toggle("active",(i/12)*100<=p));
+  const child=$("#prayerChild"), bubble=$("#journeyBubble");
+  // visual path follows the center-line of the staircase
+  const x=15 + p*0.64;
+  const y=13 + p*0.60;
+  child.style.left=`${x}%`;
+  child.style.bottom=`${y}%`;
+  bubble.textContent=`${pctText()}%`;
+  $$(".step").forEach((s,i)=>s.classList.toggle("active",(i/11)*100<=p));
 }
 function remainingCalendarDays(){return schedule.length}
 function render(){
@@ -81,5 +89,5 @@ $("#quickAlarmBtn").onclick=()=>togglePanel("reminderPanel",true);
 $$("[data-scroll]").forEach(b=>b.onclick=()=>{if(b.dataset.scroll==="today")document.querySelector(".today-card").scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0,behavior:"smooth"})});
 
 let deferredPrompt;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
-if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-3");
+if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-5");
 buildStairs();fillBooks();if(saved.updatedAt)$("#progressEditor").classList.add("collapsed");render();
