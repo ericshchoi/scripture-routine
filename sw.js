@@ -1,13 +1,60 @@
 
-const CACHE="scripture-pwa-v2-approved-ui";
-const ASSETS=["/","/index.html","/styles.css","/app.js","/scripture.js","/manifest.webmanifest"];
-self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
-self.addEventListener("fetch",e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
-self.addEventListener("push",e=>{
-  let data={title:"필사루틴",body:"오늘의 필사 시간이 되었습니다."};
-  try{data={...data,...e.data.json()}}catch{}
-  e.waitUntil(self.registration.showNotification(data.title,{body:data.body,icon:"/icon.svg",badge:"/icon.svg",data:{url:"/"}}));
+const CACHE="scripture-pwa-v2-1-20260814-3";
+const ASSETS=[
+  "/",
+  "/index.html",
+  "/styles.css?v=20260814-3",
+  "/app.js?v=20260814-3",
+  "/scripture.js?v=20260814-3",
+  "/manifest.webmanifest",
+  "/icon.svg"
+];
+
+self.addEventListener("install", event => {
+  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+  );
 });
-self.addEventListener("notificationclick",e=>{
-  e.notification.close(); e.waitUntil(clients.openWindow(e.notification.data?.url||"/"));
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    Promise.all([
+      caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))),
+      self.clients.claim()
+    ])
+  );
+});
+
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
+
+  // Always prefer the newest deployed files; use cache only as offline fallback.
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        const copy = response.clone();
+        caches.open(CACHE).then(cache => cache.put(event.request, copy));
+        return response;
+      })
+      .catch(() => caches.match(event.request).then(r => r || caches.match("/index.html")))
+  );
+});
+
+self.addEventListener("push", event => {
+  let data={title:"청운교회 신약 필사",body:"오늘의 필사 시간이 되었습니다."};
+  try { data={...data,...event.data.json()}; } catch {}
+  event.waitUntil(
+    self.registration.showNotification(data.title,{
+      body:data.body,
+      icon:"/icon.svg",
+      badge:"/icon.svg",
+      data:{url:"/"}
+    })
+  );
+});
+
+self.addEventListener("notificationclick", event => {
+  event.notification.close();
+  event.waitUntil(clients.openWindow(event.notification.data?.url || "/"));
 });

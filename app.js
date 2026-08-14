@@ -1,4 +1,8 @@
 const LS={progress:"scripture_progress_v2",history:"scripture_history_v2",reminder:"scripture_reminder_v2"};
+if(!window.NT_BOOKS || !Array.isArray(window.NT_BOOKS) || window.NT_BOOKS.length<20){
+  document.body.innerHTML='<main style="padding:24px;font-family:system-ui"><h2>새 버전 데이터를 불러오지 못했습니다.</h2><p>브라우저 캐시를 새로고침한 뒤 다시 열어주세요.</p></main>';
+  throw new Error("NT_BOOKS data missing");
+}
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], BOOKS=window.NT_BOOKS, TARGET_END="2026-12-31";
 const verses=[], verseIndex=new Map();
 BOOKS.forEach((b,bi)=>b.chapters.forEach((count,ci)=>{for(let v=1;v<=count;v++){let o={book:b.name,bookIndex:bi,chapter:ci+1,verse:v};verseIndex.set(`${bi}:${ci+1}:${v}`,verses.length);verses.push(o)}}));
@@ -77,5 +81,5 @@ $("#quickAlarmBtn").onclick=()=>togglePanel("reminderPanel",true);
 $$("[data-scroll]").forEach(b=>b.onclick=()=>{if(b.dataset.scroll==="today")document.querySelector(".today-card").scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0,behavior:"smooth"})});
 
 let deferredPrompt;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
-if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js");
+if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-3");
 buildStairs();fillBooks();if(saved.updatedAt)$("#progressEditor").classList.add("collapsed");render();

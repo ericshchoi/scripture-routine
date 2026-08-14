@@ -53,3 +53,11 @@ iOS 16.4+에서 홈 화면에 추가한 웹앱은 Web Push를 지원합니다. �
 - 오늘의 필사 카드
 - 알림 설정 / 전체 계획 / 진도 현황 접이식 메뉴
 - 모바일 하단 네비게이션
+
+
+## V2.1 캐시/초기화 수정
+- CSS/JS/scripture 데이터 파일에 버전 쿼리 적용
+- 새 Service Worker 즉시 활성화(skipWaiting/clientsClaim)
+- 예전 캐시 자동 삭제
+- 모든 GET 요청을 network-first로 변경
+- scripture 데이터 로드 실패 시 명확한 오류 화면 표시
