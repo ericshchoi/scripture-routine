@@ -77,5 +77,5 @@ $("#quickAlarmBtn").onclick=()=>togglePanel("reminderPanel",true);
 $$("[data-scroll]").forEach(b=>b.onclick=()=>{if(b.dataset.scroll==="today")document.querySelector(".today-card").scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0,behavior:"smooth"})});
 
 let deferredPrompt;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
-if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-8");
+if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js?v=20260814-9");
 buildStairs();fillBooks();if(saved.updatedAt)$("#progressEditor").classList.add("collapsed");render();
