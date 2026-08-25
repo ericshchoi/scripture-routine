@@ -1,16 +1,16 @@
 
-const CACHE="scripture-pwa-v3-1-20260825-31";
+const CACHE="scripture-pwa-v3-2-20260826-32";
 const ASSETS=[
   "/",
   "/index.html",
-  "/styles.css?v=20260825-31",
-  "/app.js?v=20260825-31",
-  "/scripture.js?v=20260825-31",
+  "/styles.css?v=20260826-32",
+  "/app.js?v=20260826-32",
+  "/scripture.js?v=20260826-32",
   "/manifest.webmanifest",
   "/icon.svg",
-  "/journey-background.jpg?v=20260825-31",
-  "/praying-child.png?v=20260825-31",
-  "/journey-art.jpg?v=20260825-31"
+  "/journey-background.jpg?v=20260826-32",
+  "/praying-child.png?v=20260826-32",
+  "/journey-art.jpg?v=20260826-32"
 ];
 
 self.addEventListener("install", event => {
