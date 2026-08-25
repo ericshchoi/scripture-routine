@@ -367,3 +367,25 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
 @media(min-width:700px){
  .shell{max-width:920px}.hero-zone{height:620px}.layered-journey{height:465px;max-width:none}.hero-copy{max-width:none}
 }
+
+
+/* V3.3 — responsive child-on-stair positioning */
+.moving-progress{
+  transform:translate(-50%,0) !important;
+  transform-origin:center bottom;
+}
+.moving-child{
+  position:absolute;
+  left:0;
+  bottom:0;
+}
+@media(max-width:600px){
+  .moving-progress{width:98px;height:126px}
+  .moving-child{width:94px}
+  .moving-progress .journey-bubble{left:78px;top:14px}
+}
+@media(min-width:700px){
+  .moving-progress{width:116px;height:144px}
+  .moving-child{width:108px}
+  .moving-progress .journey-bubble{left:91px;top:16px}
+}

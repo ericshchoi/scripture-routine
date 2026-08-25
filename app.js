@@ -15,7 +15,28 @@ function remainingRefs(){let out=[];BOOKS.forEach((b,bi)=>{let done=completedInB
 function eligibleDates(){let d=new Date(todayISO()+"T00:00:00"),e=new Date(targetDate+"T00:00:00"),a=[];while(d<=e){if(d.getDay()!==0)a.push(d.toLocaleDateString("sv-SE"));d.setDate(d.getDate()+1)}return a}
 function generateSchedule(){let rem=remainingRefs(),dates=eligibleDates();if(!rem.length||!dates.length){schedule=[];return}dates=dates.slice(0,Math.min(dates.length,rem.length));let base=Math.floor(rem.length/dates.length),extra=rem.length%dates.length,idx=0;schedule=dates.map((date,i)=>{let n=base+(i<extra?1:0),part=rem.slice(idx,idx+n);idx+=n;return{date,refs:part,verses:n,range:`${ref(part[0])} ~ ${ref(part[part.length-1])}`}})}
 function currentItem(){return schedule.find(x=>x.date===todayISO())||schedule.find(x=>x.date>todayISO())||null}function streak(){let set=new Set(history.map(x=>x.date)),n=0,d=new Date();for(let i=0;i<400;i++){let iso=d.toLocaleDateString("sv-SE");if(d.getDay()===0){d.setDate(d.getDate()-1);continue}if(set.has(iso)){n++;d.setDate(d.getDate()-1)}else if(iso===todayISO())d.setDate(d.getDate()-1);else break}return n}
-function renderJourney(p){let moving=$("#movingProgress"),bubble=$("#journeyBubble");if(!moving||!bubble)return;let t=Math.max(0,Math.min(100,p))/100;moving.style.left=`${14+69*t}%`;moving.style.bottom=`${8+56*t}%`;bubble.textContent=`${pctText()}%`}
+function renderJourney(p){
+  const moving=$("#movingProgress"),bubble=$("#journeyBubble");
+  if(!moving||!bubble)return;
+  const t=Math.max(0,Math.min(100,p))/100;
+  const vw=window.innerWidth;
+  let x0,y0,x1,y1;
+  if(vw<=600){
+    // 일반 스마트폰: 아래 첫 계단부터 십자가 직전까지
+    x0=17; y0=7.5; x1=76; y1=66;
+  }else if(vw>=700){
+    // Z Fold 펼친 화면 / 태블릿: 넓어진 계단 원근에 맞춤
+    x0=18; y0=7; x1=79; y1=65;
+  }else{
+    // 중간 폭은 두 경로를 자연스럽게 보간
+    const k=(vw-600)/100;
+    x0=17+(18-17)*k; y0=7.5+(7-7.5)*k;
+    x1=76+(79-76)*k; y1=66+(65-66)*k;
+  }
+  moving.style.left=`${x0+(x1-x0)*t}%`;
+  moving.style.bottom=`${y0+(y1-y0)*t}%`;
+  bubble.textContent=`${pctText()}%`;
+}%`;moving.style.bottom=`${8+56*t}%`;bubble.textContent=`${pctText()}%`}
 function splitTreemap(items,x,y,w,h,out=[]){if(!items.length)return out;if(items.length===1){out.push({...items[0],x,y,w,h});return out}let total=items.reduce((s,a)=>s+a.total,0),sum=0,cut=0;for(let i=0;i<items.length;i++){if(sum+items[i].total>total/2&&i>0)break;sum+=items[i].total;cut=i+1}cut=Math.max(1,Math.min(items.length-1,cut));let a=items.slice(0,cut),b=items.slice(cut),ratio=a.reduce((s,z)=>s+z.total,0)/total;if(w>=h){splitTreemap(a,x,y,w*ratio,h,out);splitTreemap(b,x+w*ratio,y,w*(1-ratio),h,out)}else{splitTreemap(a,x,y,w,h*ratio,out);splitTreemap(b,x,y+h*ratio,w,h*(1-ratio),out)}return out}
 const BOOK_ABBR=["마","막","눅","요","행","롬","고전","고후","갈","엡","빌","골","살전","살후","딤전","딤후","딛","몬","히","약","벧전","벧후","요일","요이","요삼","유","계"];
 function renderTreemap(){let box=$("#bookTreemap");if(!box)return;let items=BOOKS.map((b,bi)=>({bi,name:b.name,total:bookTotals[bi]})),rects=splitTreemap(items,0,0,100,100);box.innerHTML=rects.map(r=>{let done=completedInBook(r.bi),pct=done/r.total*100,abbr=BOOK_ABBR[r.bi];return `<button class="book-tile" data-bi="${r.bi}" aria-label="${r.name}" style="left:${r.x}%;top:${r.y}%;width:${r.w}%;height:${r.h}%"><span class="done-fill" style="width:${pct}%"></span><span class="book-label"><strong>${abbr}</strong><small>${Math.round(pct)}%</small></span></button>`}).join("")}
@@ -31,4 +52,4 @@ const labels=["일","월","화","수","목","금","토"];$("#dayButtons").innerH
 function togglePanel(id,forceOpen=true){let p=$("#"+id);if(!p)return;if(forceOpen)p.classList.add('open');else p.classList.toggle('open');setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),50)}$$('[data-target]').forEach(b=>b.onclick=()=>togglePanel(b.dataset.target,false));$("#quickAlarmBtn").onclick=()=>togglePanel('reminderPanel',true);$$('[data-scroll]').forEach(b=>b.onclick=()=>{if(b.dataset.scroll==='today')document.querySelector('.today-card').scrollIntoView({behavior:'smooth'});else window.scrollTo({top:0,behavior:'smooth'})});
 let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove('hidden')});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
 function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}function setupInstallGuide(){let card=$("#installGuideCard"),modal=$("#installGuideModal"),open=$("#installGuideBtn"),native=$("#nativeInstallBtn");if(!card||!modal||!open)return;if(isStandalone()){card.classList.add('hidden');return}open.onclick=()=>{modal.classList.remove('hidden');document.body.style.overflow='hidden'};modal.querySelectorAll('[data-close-install]').forEach(x=>x.onclick=()=>{modal.classList.add('hidden');document.body.style.overflow=''})}
-if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=20260826-32');setupInstallGuide();render();
+let scriptureJourneyResize;window.addEventListener('resize',()=>{clearTimeout(scriptureJourneyResize);scriptureJourneyResize=setTimeout(()=>renderJourney(progressValue()),120)});if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=20260826-33');setupInstallGuide();render();
