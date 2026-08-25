@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=20260814-12">
+  <link rel="stylesheet" href="/styles.css?v=20260825-31">
   <title>청운교회 피택자 신약 필사 진도 체크</title>
 </head>
 <body>
@@ -33,11 +33,11 @@
       </div>
 
       <div class="journey layered-journey" aria-label="필사 진도 계단">
-        <img class="journey-bg" src="/journey-background.jpg?v=20260814-12" alt="" aria-hidden="true">
+        <img class="journey-bg" src="/journey-background.jpg?v=20260825-31" alt="" aria-hidden="true">
         <div class="marker marker-zero">0%</div>
         <div class="marker marker-hundred">100%</div>
         <div id="movingProgress" class="moving-progress">
-          <img id="prayerChild" class="moving-child" src="/praying-child.png?v=20260814-12" alt="무릎 꿇고 기도하는 아이">
+          <img id="prayerChild" class="moving-child" src="/praying-child.png?v=20260825-31" alt="무릎 꿇고 기도하는 아이">
           <div id="journeyBubble" class="journey-bubble">0%</div>
         </div>
       </div>
@@ -56,21 +56,32 @@
       </div>
     </section>
 
-    <section class="card current-card">
+    <section class="card book-progress-card">
       <div class="section-heading">
-        <div><p class="eyebrow">CURRENT PROGRESS</p><h3>현재 완료 위치 설정</h3></div>
-        <button id="progressEditBtn" class="text-btn">진도 수정</button>
+        <div><p class="eyebrow">BOOK PROGRESS</p><h3>권별 필사 진도</h3></div>
+        <span class="dashboard-hint">블록을 눌러 진도를 입력하세요</span>
       </div>
-      <p class="helper">마지막으로 완료한 위치를 입력해주세요. 그 다음 절부터 계획을 다시 계산합니다.</p>
-      <div id="progressSummary" class="progress-summary">진도를 설정해주세요.</div>
-      <div id="progressEditor" class="progress-editor">
-        <label><span>성경</span><select id="bookSelect"></select></label>
-        <label><span>장</span><select id="chapterSelect"></select></label>
-        <label><span>절</span><select id="verseSelect"></select></label>
-        <button id="saveProgressBtn" class="purple-btn">↻ 적용하고 계획 다시 계산</button>
-      </div>
-      <div class="example-note">ⓘ 예: 마가복음 10장 20절까지 완료하셨다면, 마가복음 10장 21절부터 다시 계획됩니다.</div>
+      <p class="helper">순서와 관계없이 완료한 각 권의 위치를 기록할 수 있습니다. 블록 크기는 각 권의 전체 절 수에 비례합니다.</p>
+      <div id="bookTreemap" class="book-treemap" aria-label="신약 권별 필사 진도 대시보드"></div>
+      <div class="treemap-legend"><span><i class="legend-remain"></i> 남은 분량</span><span><i class="legend-done"></i> 완료 분량</span></div>
     </section>
+
+    <div id="bookProgressModal" class="book-modal hidden" role="dialog" aria-modal="true">
+      <div class="book-modal-backdrop" data-close-book></div>
+      <div class="book-modal-sheet">
+        <button class="install-modal-close" type="button" data-close-book>×</button>
+        <p class="eyebrow">BOOK PROGRESS</p><h3 id="bookModalTitle">진도 입력</h3>
+        <p id="bookModalSummary" class="helper"></p>
+        <div class="book-progress-selects">
+          <label><span>장</span><select id="bookChapterSelect"></select></label>
+          <label><span>절</span><select id="bookVerseSelect"></select></label>
+        </div>
+        <div class="book-modal-actions">
+          <button id="clearBookProgress" class="undo-btn" type="button">이 권 진도 초기화</button>
+          <button id="saveBookProgress" class="purple-btn" type="button">완료 위치 저장</button>
+        </div>
+      </div>
+    </div>
 
     <section class="card today-card">
       <div class="today-copy">
@@ -113,6 +124,8 @@
 
     <section id="planPanel" class="card fold-panel">
       <div class="section-heading"><div><p class="eyebrow">PLAN</p><h3>전체 필사 계획</h3></div><button id="reflowBtn" class="text-btn">오늘부터 재분배</button></div>
+      <div class="target-date-row"><label for="targetDate"><span>🎯 목표 완료일</span><input id="targetDate" type="date"></label><button id="saveTargetDate" class="purple-btn">목표일 적용</button></div>
+      <p id="targetDateHelp" class="helper">목표일을 바꾸면 남은 필사일과 하루 분량을 자동으로 다시 계산합니다.</p>
       <div id="planList" class="plan"></div>
     </section>
 
@@ -164,7 +177,7 @@
       </div>
     </div>
 
-    <footer>한 절, 한 절이 모여 주님께 더 가까이 갑니다. · 목표 2026년 12월 31일</footer>
+    <footer>한 절, 한 절이 모여 주님께 더 가까이 갑니다. · 목표 <span id="footerTargetDate">2026년 12월 31일</span></footer>
 
     <nav class="bottom-nav">
       <button data-scroll="top">⌂<span>홈</span></button>
@@ -174,7 +187,7 @@
       <button data-target="reminderPanel">⚙<span>설정</span></button>
     </nav>
   </main>
-  <script src="/scripture.js?v=20260814-12"></script>
-  <script src="/app.js?v=20260814-12"></script>
+  <script src="/scripture.js?v=20260825-31"></script>
+  <script src="/app.js?v=20260825-31"></script>
 </body>
 </html>
