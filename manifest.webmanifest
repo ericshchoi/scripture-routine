@@ -1,6 +1,6 @@
 {
-  "name": "청운교회 피택자 신약 필사 진도 체크",
-  "short_name": "청운교회 신약필사",
+  "name": "성경필사",
+  "short_name": "성경필사",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f7f6fb",
@@ -13,5 +13,6 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "id": "/"
 }

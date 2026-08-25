@@ -389,3 +389,16 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
   .moving-child{width:108px}
   .moving-progress .journey-bubble{left:91px;top:16px}
 }
+
+/* V3.4 real Web Push */
+.push-test-btn{
+  width:100%;margin-top:9px;border:1px solid #d9d0ef;background:#fff;color:#6040bd;
+  border-radius:11px;padding:12px 14px;font-weight:800;cursor:pointer
+}
+.push-status{
+  margin:10px 0 2px;padding:9px 11px;border-radius:10px;background:#f5f3f9;
+  color:#716b7c;font-size:12px;line-height:1.45
+}
+.push-status.ok{background:#edf8f0;color:#287544}
+.push-status.warn{background:#fff6e5;color:#8b641c}
+.push-status.error{background:#fff0f0;color:#a13f3f}

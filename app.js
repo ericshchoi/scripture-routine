@@ -48,8 +48,140 @@ function render(){generateSchedule();let cur=currentItem(),p=progressValue(),com
 $("#bookTreemap").onclick=e=>{let b=e.target.closest('.book-tile');if(b)openBookModal(+b.dataset.bi)};$("#bookChapterSelect").onchange=e=>fillBookVerses(+e.target.value,1);$$('[data-close-book]').forEach(x=>x.onclick=closeBookModal);$("#saveBookProgress").onclick=()=>{let ch=+$("#bookChapterSelect").value,v=+$("#bookVerseSelect").value;bookProgress[activeBook]={chapter:ch,verse:ch?v:0};saveAll();closeBookModal();render()};$("#clearBookProgress").onclick=()=>{bookProgress[activeBook]={chapter:0,verse:0};saveAll();closeBookModal();render()};
 $("#saveTargetDate").onclick=()=>{let v=$("#targetDate").value;if(!v)return;let min=todayISO();if(v<min){$("#targetDateHelp").textContent="목표일은 오늘 이후로 선택해주세요.";return}targetDate=v;localStorage.setItem(LS.target,targetDate);$("#targetDateHelp").textContent="목표일을 저장했습니다. 남은 필사량을 다시 계산했습니다.";render()};$("#reflowBtn").onclick=render;
 $("#completeBtn").onclick=()=>{let cur=currentItem();if(!cur)return;let snapshot=JSON.parse(JSON.stringify(bookProgress));cur.refs.forEach(r=>{let bi=r.bookIndex,now=completedInBook(bi),candidate=BOOKS[bi].chapters.slice(0,r.chapter-1).reduce((a,n)=>a+n,0)+r.verse;if(candidate>now)bookProgress[bi]={chapter:r.chapter,verse:r.verse}});history=history.filter(x=>x.date!==todayISO());history.push({date:todayISO(),snapshot});saveAll();localStorage.setItem(LS.history,JSON.stringify(history));render()};$("#undoBtn").onclick=()=>{let t=todayISO(),h=history.find(x=>x.date===t);if(!h)return;bookProgress=h.snapshot;history=history.filter(x=>x.date!==t);saveAll();localStorage.setItem(LS.history,JSON.stringify(history));render()};
-const labels=["일","월","화","수","목","금","토"];$("#dayButtons").innerHTML=labels.map((x,i)=>`<button class="day ${reminder.days.includes(i)?"active":""}" data-day="${i}">${x}</button>`).join("");$("#dayButtons").onclick=e=>{if(!e.target.matches('.day'))return;let d=+e.target.dataset.day;reminder.days=reminder.days.includes(d)?reminder.days.filter(x=>x!==d):[...reminder.days,d].sort();e.target.classList.toggle('active')};async function requestNotifications(){if(!('Notification'in window))throw new Error('이 브라우저는 알림을 지원하지 않습니다.');let p=await Notification.requestPermission();if(p!=='granted')throw new Error('알림 권한이 허용되지 않았습니다.')}$("#saveReminder").onclick=async()=>{reminder.enabled=$("#notifyToggle").checked;reminder.time=$("#notifyTime").value;if(reminder.enabled){try{await requestNotifications()}catch(e){$("#notifyHelp").textContent=e.message;return}}localStorage.setItem(LS.reminder,JSON.stringify(reminder));$("#notifyHelp").textContent='알림 설정을 저장했습니다.'};
+const labels=["일","월","화","수","목","금","토"];
+$("#dayButtons").innerHTML=labels.map((x,i)=>`<button class="day ${reminder.days.includes(i)?"active":""}" data-day="${i}">${x}</button>`).join("");
+$("#dayButtons").onclick=e=>{
+  if(!e.target.matches(".day"))return;
+  let d=+e.target.dataset.day;
+  reminder.days=reminder.days.includes(d)?reminder.days.filter(x=>x!==d):[...reminder.days,d].sort();
+  e.target.classList.toggle("active");
+};
+
+function urlBase64ToUint8Array(base64String){
+  const padding="=".repeat((4-base64String.length%4)%4);
+  const base64=(base64String+padding).replace(/-/g,"+").replace(/_/g,"/");
+  const raw=atob(base64);
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
+
+async function ensurePushSubscription(){
+  if(!("serviceWorker" in navigator)) throw new Error("이 브라우저는 푸시 알림을 지원하지 않습니다.");
+  if(!("Notification" in window)) throw new Error("이 브라우저는 알림 권한을 지원하지 않습니다.");
+
+  let permission=Notification.permission;
+  if(permission!=="granted"){
+    permission=await Notification.requestPermission();
+  }
+  if(permission!=="granted") throw new Error("알림 권한이 허용되지 않았습니다.");
+
+  const reg=await navigator.serviceWorker.ready;
+  if(!reg.pushManager) throw new Error("이 기기에서는 Web Push를 사용할 수 없습니다.");
+
+  const cfg=await fetch("/api/config",{cache:"no-store"}).then(r=>{
+    if(!r.ok) throw new Error("푸시 서버 설정을 불러오지 못했습니다.");
+    return r.json();
+  });
+  if(!cfg.vapidPublicKey) throw new Error("서버의 푸시 키가 아직 설정되지 않았습니다.");
+
+  let sub=await reg.pushManager.getSubscription();
+  if(!sub){
+    sub=await reg.pushManager.subscribe({
+      userVisibleOnly:true,
+      applicationServerKey:urlBase64ToUint8Array(cfg.vapidPublicKey)
+    });
+  }
+
+  const payload={
+    subscription:sub,
+    reminder,
+    timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"Asia/Seoul"
+  };
+  const resp=await fetch("/api/subscribe",{
+    method:"POST",
+    headers:{"content-type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+  if(!resp.ok) throw new Error("푸시 구독 저장에 실패했습니다.");
+
+  localStorage.setItem("scripture_push_endpoint_v34",sub.endpoint);
+  return sub;
+}
+
+function setPushStatus(text,type=""){
+  const el=$("#pushStatus");
+  if(!el)return;
+  el.textContent=text;
+  el.className="push-status"+(type?` ${type}`:"");
+}
+
+async function refreshPushStatus(){
+  if(!("Notification" in window)){setPushStatus("이 브라우저는 푸시 알림을 지원하지 않습니다.","error");return}
+  if(Notification.permission==="denied"){setPushStatus("알림 권한이 차단되어 있습니다. 휴대폰 설정에서 허용해주세요.","error");return}
+  if(Notification.permission!=="granted"){setPushStatus("알림을 켜고 저장하면 휴대폰 푸시가 활성화됩니다.","warn");return}
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    const sub=await reg.pushManager?.getSubscription();
+    setPushStatus(sub?"✅ 푸시 알림이 이 기기에 연결되어 있습니다.":"알림 권한은 있으나 푸시 연결이 필요합니다.","ok");
+  }catch{
+    setPushStatus("푸시 상태를 확인하지 못했습니다.","warn");
+  }
+}
+
+$("#saveReminder").onclick=async()=>{
+  reminder.enabled=$("#notifyToggle").checked;
+  reminder.time=$("#notifyTime").value;
+  localStorage.setItem(LS.reminder,JSON.stringify(reminder));
+
+  try{
+    if(reminder.enabled){
+      await ensurePushSubscription();
+      $("#notifyHelp").textContent=`매주 선택한 요일 ${reminder.time}에 실제 푸시 알림을 보내도록 저장했습니다.`;
+      setPushStatus("✅ 실제 푸시 알림 활성화 완료","ok");
+    }else{
+      const endpoint=localStorage.getItem("scripture_push_endpoint_v34");
+      await fetch("/api/reminder",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({endpoint,reminder,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"Asia/Seoul"})
+      });
+      $("#notifyHelp").textContent="필사 알림을 껐습니다.";
+      setPushStatus("알림이 꺼져 있습니다.","warn");
+    }
+  }catch(e){
+    $("#notifyHelp").textContent=e.message;
+    setPushStatus(`⚠️ ${e.message}`,"error");
+  }
+};
+
+$("#testPushBtn").onclick=async()=>{
+  const btn=$("#testPushBtn");
+  btn.disabled=true;
+  const original=btn.textContent;
+  btn.textContent="테스트 알림 보내는 중…";
+  try{
+    const sub=await ensurePushSubscription();
+    const r=await fetch("/api/test-push",{
+      method:"POST",headers:{"content-type":"application/json"},
+      body:JSON.stringify({endpoint:sub.endpoint})
+    });
+    const result=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(result.error||"테스트 알림 발송 실패");
+    setPushStatus("✅ 테스트 푸시를 보냈습니다. 잠시 후 휴대폰 알림을 확인하세요.","ok");
+  }catch(e){
+    setPushStatus(`⚠️ ${e.message}`,"error");
+  }finally{
+    btn.disabled=false;
+    btn.textContent=original;
+  }
+};
 function togglePanel(id,forceOpen=true){let p=$("#"+id);if(!p)return;if(forceOpen)p.classList.add('open');else p.classList.toggle('open');setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),50)}$$('[data-target]').forEach(b=>b.onclick=()=>togglePanel(b.dataset.target,false));$("#quickAlarmBtn").onclick=()=>togglePanel('reminderPanel',true);$$('[data-scroll]').forEach(b=>b.onclick=()=>{if(b.dataset.scroll==='today')document.querySelector('.today-card').scrollIntoView({behavior:'smooth'});else window.scrollTo({top:0,behavior:'smooth'})});
 let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove('hidden')});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
 function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}function setupInstallGuide(){let card=$("#installGuideCard"),modal=$("#installGuideModal"),open=$("#installGuideBtn"),native=$("#nativeInstallBtn");if(!card||!modal||!open)return;if(isStandalone()){card.classList.add('hidden');return}open.onclick=()=>{modal.classList.remove('hidden');document.body.style.overflow='hidden'};modal.querySelectorAll('[data-close-install]').forEach(x=>x.onclick=()=>{modal.classList.add('hidden');document.body.style.overflow=''})}
-let scriptureJourneyResize;window.addEventListener('resize',()=>{clearTimeout(scriptureJourneyResize);scriptureJourneyResize=setTimeout(()=>renderJourney(progressValue()),120)});if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=20260826-331');setupInstallGuide();render();
+let scriptureJourneyResize;window.addEventListener('resize',()=>{clearTimeout(scriptureJourneyResize);scriptureJourneyResize=setTimeout(()=>renderJourney(progressValue()),120)});if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=20260826-340');setupInstallGuide();render();
+
+// V3.4: refresh server subscription whenever the installed app is opened.
+window.addEventListener("load",()=>{
+  refreshPushStatus();
+  if(reminder?.enabled && Notification.permission==="granted"){
+    ensurePushSubscription().catch(()=>{});
+  }
+});

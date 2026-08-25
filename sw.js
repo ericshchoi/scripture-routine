@@ -1,16 +1,15 @@
 
-const CACHE="scripture-pwa-v3-3-1-20260826-331";
+const CACHE="scripture-pwa-v3-4-20260826-340";
 const ASSETS=[
   "/",
   "/index.html",
-  "/styles.css?v=20260826-331",
-  "/app.js?v=20260826-331",
-  "/scripture.js?v=20260826-331",
+  "/styles.css?v=20260826-340",
+  "/app.js?v=20260826-340",
+  "/scripture.js?v=20260826-340",
   "/manifest.webmanifest",
   "/icon.svg",
-  "/journey-background.jpg?v=20260826-331",
-  "/praying-child.png?v=20260826-331",
-  "/journey-art.jpg?v=20260826-331"
+  "/journey-background.jpg?v=20260826-340",
+  "/praying-child.png?v=20260826-340"
 ];
 
 self.addEventListener("install", event => {
@@ -45,16 +44,17 @@ self.addEventListener("fetch", event => {
 });
 
 self.addEventListener("push", event => {
-  let data={title:"청운교회 신약 필사",body:"오늘의 필사 시간이 되었습니다."};
-  try { data={...data,...event.data.json()}; } catch {}
-  event.waitUntil(
-    self.registration.showNotification(data.title,{
-      body:data.body,
-      icon:"/icon.svg",
-      badge:"/icon.svg",
-      data:{url:"/"}
-    })
-  );
+  let data={title:"성경필사 ✍️",body:"오늘의 필사 시간이 되었습니다.",url:"/"};
+  try{data={...data,...event.data.json()}}catch{}
+  event.waitUntil(self.registration.showNotification(data.title,{
+    body:data.body,
+    icon:"/icon.svg",
+    badge:"/icon.svg",
+    tag:"scripture-reminder",
+    renotify:true,
+    vibrate:[180,80,180],
+    data:{url:data.url||"/"}
+  }));
 });
 
 self.addEventListener("notificationclick", event => {
