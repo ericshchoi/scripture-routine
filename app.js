@@ -18,19 +18,19 @@ function currentItem(){return schedule.find(x=>x.date===todayISO())||schedule.fi
 // V3.5: move the child along the ACTUAL staircase in the source artwork.
 // Coordinates below are points on the stair treads of journey-background.jpg (1800 x 900).
 const STAIR_PATH_SOURCE = [
-  [350, 770],
-  [435, 720],
-  [530, 665],
-  [625, 610],
-  [725, 555],
-  [825, 500],
-  [925, 445],
-  [1025, 390],
-  [1115, 335],
-  [1195, 285],
-  [1260, 235],
-  [1305, 190],
-  [1335, 150]
+  [115, 785],
+  [210, 720],
+  [320, 655],
+  [435, 595],
+  [555, 535],
+  [675, 480],
+  [790, 425],
+  [890, 370],
+  [975, 320],
+  [1045, 272],
+  [1095, 230],
+  [1125, 195],
+  [1145, 168]
 ];
 
 function pointOnPolyline(points, t){
@@ -83,7 +83,7 @@ function renderJourney(p){
     moving.style.top=`${y}px`;
     moving.style.bottom="auto";
     // The bottom-centre of the child sits on the stair tread.
-    moving.style.transform="translate(-50%,-88%)";
+    moving.style.transform="translate(-50%,-92%)";
     bubble.textContent=`${pctText()}%`;
   };
 
@@ -229,7 +229,7 @@ $("#testPushBtn").onclick=async()=>{
 function togglePanel(id,forceOpen=true){let p=$("#"+id);if(!p)return;if(forceOpen)p.classList.add('open');else p.classList.toggle('open');setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),50)}$$('[data-target]').forEach(b=>b.onclick=()=>togglePanel(b.dataset.target,false));$("#quickAlarmBtn").onclick=()=>togglePanel('reminderPanel',true);$$('[data-scroll]').forEach(b=>b.onclick=()=>{if(b.dataset.scroll==='today')document.querySelector('.today-card').scrollIntoView({behavior:'smooth'});else window.scrollTo({top:0,behavior:'smooth'})});
 let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove('hidden')});$("#installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
 function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}function setupInstallGuide(){let card=$("#installGuideCard"),modal=$("#installGuideModal"),open=$("#installGuideBtn"),native=$("#nativeInstallBtn");if(!card||!modal||!open)return;if(isStandalone()){card.classList.add('hidden');return}open.onclick=()=>{modal.classList.remove('hidden');document.body.style.overflow='hidden'};modal.querySelectorAll('[data-close-install]').forEach(x=>x.onclick=()=>{modal.classList.add('hidden');document.body.style.overflow=''})}
-let scriptureJourneyResize;window.addEventListener('resize',()=>{clearTimeout(scriptureJourneyResize);scriptureJourneyResize=setTimeout(()=>renderJourney(progressValue()),120)});if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=20260907-350');setupInstallGuide();render();
+let scriptureJourneyResize;window.addEventListener('resize',()=>{clearTimeout(scriptureJourneyResize);scriptureJourneyResize=setTimeout(()=>renderJourney(progressValue()),120)});if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=20260907-360');setupInstallGuide();render();
 
 // V3.4: refresh server subscription whenever the installed app is opened.
 window.addEventListener("load",()=>{

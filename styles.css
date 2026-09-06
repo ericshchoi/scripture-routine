@@ -417,3 +417,8 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
   left:0;
   bottom:0;
 }
+
+/* V3.6 — move along the visual CENTER of each stair tread */
+.moving-progress{
+  transform:translate(-50%,-92%) !important;
+}
