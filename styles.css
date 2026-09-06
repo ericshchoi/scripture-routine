@@ -402,3 +402,18 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
 .push-status.ok{background:#edf8f0;color:#287544}
 .push-status.warn{background:#fff6e5;color:#8b641c}
 .push-status.error{background:#fff0f0;color:#a13f3f}
+
+/* V3.5 — actual staircase path movement */
+.moving-progress{
+  position:absolute !important;
+  bottom:auto !important;
+  transform:translate(-50%,-88%) !important;
+  transform-origin:center bottom;
+  transition:left .65s cubic-bezier(.2,.8,.2,1), top .65s cubic-bezier(.2,.8,.2,1);
+  pointer-events:none;
+}
+.moving-child{
+  position:absolute;
+  left:0;
+  bottom:0;
+}
