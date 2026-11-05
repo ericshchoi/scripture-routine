@@ -232,7 +232,7 @@ footer{text-align:center;color:#948f9d;font-size:11px;margin:25px 0 10px}
 }
 @media(max-width:420px){
  .hero{min-height:735px}.hero-copy{padding:26px 22px 0}
- .hero-copy h1{font-size:30px;line-height:1.3}
+ .hero-copy h1{font-size:25px;line-height:1.3;white-space:nowrap}
  .hero-copy h1 .title-line1,.hero-copy h1 .title-line2{display:block}
  .hero-copy .verse{font-size:15px;margin-top:20px;white-space:nowrap}
  .hero-copy .verse-ref{font-size:14px}
